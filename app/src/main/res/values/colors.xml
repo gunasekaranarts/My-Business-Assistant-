@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent2">#24215A</color>
+    <color name="black">#000</color>
+    <color name="grey">#ccc</color>
+    <color name="darkgrey">#353535</color>
+    <color name="green">#008000</color>
+    <color name="green_start">#009688</color>
+    <color name="green_start_press">#7fcac3</color>
+    <color name="green_lite">#afbe97</color>
+    <color name="red">#ff0000</color>
+    <color name="stop_red">#f44336</color>
+    <color name="lightred">#ffb2b2</color>
+    <color name="DullRed">#DA3F4E</color>
+    <color name="yellow">#ffff00</color>
+    <color name="mastard_yellow">#fece35</color>
+    <color name="Darkyellow">#E6E600</color>
+    <color name="lightyellow">#ffffb2</color>
+    <color name="profileBgClr">#f0f0f0</color>
+    <color name="edtHintClr">#747385</color>
+    <color name="edttheam">#08159e</color>
+    <color name="addlayout">#a2a1b9</color>
+    <color name="tabsScrollColor">#a2a1b9</color>
+    <color name="pressed_color">#4d90fe</color>
+    <color name="default_color">#ffffff</color>
+    <color name="lightpurple">#885EAD</color>
+    <color name="white">#ffffff</color>
+    <color name="link">#0077CC</color>
+    <color name="purple">#512DA8</color>
+    <color name="group">#ffff99</color>
+    <color name="litewhite">#f5f3f3</color>
+    <color name="white_trans">#99b4b3b3</color>
+    <color name="child">#ffffcc</color>
+    <color name="lightblue">#7986CB</color>
+
+</resources>

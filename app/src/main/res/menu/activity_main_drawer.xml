@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_Home"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Import"
+            android:visible="false"
+            />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Employees"
+            android:visible="false"
+            />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Employee Types"
+            android:visible="false"
+            />
+        <item
+            android:id="@+id/nav_customers"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Customers" />
+        <item
+            android:id="@+id/nav_order"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Order Item" />
+        <item
+            android:id="@+id/nav_masteritem"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Item Master" />
+        <item
+            android:id="@+id/nav_backup"
+            android:icon="@drawable/ic_menu_backup"
+            android:title="Backup / Restore" />
+    </group>
+
+    <item android:title="My Business Assistant">
+        <menu>
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_menu_about"
+                android:title="About" />
+
+        </menu>
+    </item>
+
+</menu>
