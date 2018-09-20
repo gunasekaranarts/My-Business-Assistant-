@@ -81,7 +81,6 @@
                     android:id="@+id/txt_Name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/addresstxt"
                     android:hint="@string/profile_name"
                     android:inputType="textPersonName"
                     android:singleLine="true"
@@ -102,7 +101,6 @@
                     android:id="@+id/txt_Email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/addresstxt"
                     android:hint="@string/profile_email"
                     android:inputType="textEmailAddress"
                     android:singleLine="true"
@@ -120,12 +118,73 @@
                 android:layout_marginTop="5dp">
 
                 <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/txt_CompanyName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/profile_company"
+                    android:inputType="textPersonName"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/default_text_size" />
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/txt_Address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/profile_address"
+                    android:inputType="textMultiLine"
+                    android:minHeight="20dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textCursorDrawable="@null"
+                    android:textSize="@dimen/default_text_size" />
+
+            </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/txt_bill_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/lbl_bil_header"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textCursorDrawable="@null"
+                android:textSize="@dimen/default_text_size" />
+        </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp">
+
+                <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/txt_Mobile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/addresstxt"
                     android:hint="@string/profile_mobile"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:singleLine="true"
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"

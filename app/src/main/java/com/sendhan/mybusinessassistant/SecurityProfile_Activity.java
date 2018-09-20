@@ -39,7 +39,7 @@ import Utils.ImageConvertor;
  */
 
 public class SecurityProfile_Activity extends AppCompatActivity {
-    AppCompatEditText txtName,txtEmail,txtMobile;
+    AppCompatEditText txtName,txtEmail,txtMobile,txtCompany,txtAddress,txtbillheader;
     PinEntryEditText txtPassword,txtConfirmPassword;
     AppCompatImageView img_profile;
     Button btn_Save;
@@ -56,6 +56,9 @@ public class SecurityProfile_Activity extends AppCompatActivity {
         txtName=(AppCompatEditText) findViewById(R.id.txt_Name);
         txtEmail=(AppCompatEditText) findViewById(R.id.txt_Email);
         img_profile=(AppCompatImageView) findViewById(R.id.img_profile);
+        txtCompany=findViewById(R.id.txt_CompanyName);
+        txtAddress=findViewById(R.id.txt_Address);
+        txtbillheader=findViewById(R.id.txt_bill_header);
         GoogleSignInAccount acc= GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         if(acc!=null)
         {
@@ -99,6 +102,9 @@ public class SecurityProfile_Activity extends AppCompatActivity {
                     securityProfile.setEmail(txtEmail.getText().toString().trim());
                     securityProfile.setMobile(txtMobile.getText().toString().trim());
                     securityProfile.setPassword(txtPassword.getText().toString().trim());
+                    securityProfile.setCompanyName(txtCompany.getText().toString());
+                    securityProfile.setAddress(txtAddress.getText().toString());
+                    securityProfile.setBillHeader(txtbillheader.getText().toString());
                     new SaveProfileSetup().execute();
                 }
             }
@@ -235,6 +241,9 @@ public class SecurityProfile_Activity extends AppCompatActivity {
         txtMobile.setText("");
         txtPassword.setText("");
         txtConfirmPassword.setText("");
+        txtAddress.setText("");
+        txtCompany.setText("");
+        txtbillheader.setText("");
         showAlertWithCancels("Profile has been created successfully.");
 
     }
@@ -246,7 +255,9 @@ public class SecurityProfile_Activity extends AppCompatActivity {
         values.put(SecurityTableData.Email, securityProfile.getEmail());
         values.put(SecurityTableData.Mobile, securityProfile.getMobile());
         values.put(SecurityTableData.Password, securityProfile.getPassword());
-
+        values.put(SecurityTableData.CompanyName, securityProfile.getCompanyName());
+        values.put(SecurityTableData.Address, securityProfile.getAddress());
+        values.put(SecurityTableData.BillHeader,securityProfile.getBillHeader());
         dataBase.insert(SecurityTableData.SecurityTableName, null, values);
         dataBase.close();
 

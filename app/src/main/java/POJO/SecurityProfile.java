@@ -12,6 +12,9 @@ public class SecurityProfile implements Serializable {
     public String Password;
     public String Email;
     public String Mobile;
+    public String CompanyName;
+    public String Address;
+    public String BillHeader;
 
     public int getProfileId() {
         return ProfileId;
@@ -51,5 +54,29 @@ public class SecurityProfile implements Serializable {
 
     public void setMobile(String mobile) {
         Mobile = mobile;
+    }
+
+    public String getCompanyName() {
+        return CompanyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        CompanyName = companyName;
+    }
+
+    public String getAddress() {
+        return Address;
+    }
+
+    public void setAddress(String address) {
+        Address = address;
+    }
+
+    public String getBillHeader() {
+        return BillHeader;
+    }
+
+    public void setBillHeader(String billHeader) {
+        BillHeader = billHeader;
     }
 }

@@ -17,6 +17,7 @@ public class Employee implements Serializable {
     public String EmpRemarks;
     public int EmployeeTypeId;
     public String EmpStatus;
+    public byte[] EmployeePhoto;
 
     public int getEmployeeId() {
         return EmployeeId;
@@ -88,5 +89,13 @@ public class Employee implements Serializable {
 
     public void setEmpStatus(String empStatus) {
         EmpStatus = empStatus;
+    }
+
+    public byte[] getEmployeePhoto() {
+        return EmployeePhoto;
+    }
+
+    public void setEmployeePhoto(byte[] employeePhoto) {
+        EmployeePhoto = employeePhoto;
     }
 }

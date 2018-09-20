@@ -36,4 +36,9 @@
     <color name="child">#ffffcc</color>
     <color name="lightblue">#7986CB</color>
 
+    <color name="progressback">#E4E4E4</color>
+    <color name="pink">#FF4081</color>
+    <color name="light_gray">#F5F5F5</color>
+    <color name="tabcolour">#636363</color>
+
 </resources>

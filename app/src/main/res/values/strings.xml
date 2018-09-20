@@ -11,7 +11,10 @@
     <string name="setup_profile">Set your profile</string>
     <string name="profile_name">Name</string>
     <string name="profile_email">Email</string>
-    <string name="profile_mobile">Mobile No</string>
+    <string name="profile_mobile">Mobile Nos(separated by comma)</string>
+    <string name="lbl_bil_header">Order Page Header</string>
+    <string name="profile_company">Company Name</string>
+    <string name="profile_address">Address</string>
     <string name="profile_pin">Pin</string>
     <string name="profile_confirm_pin">Confirm Pin</string>
     <string name="profile_old_pin">Old Pin</string>
@@ -30,6 +33,14 @@
     <string name="lbl_customer_place">Place</string>
     <string name="lbl_customer">Customer Name</string>
     <string name="lbl_mobile">Mobile No</string>
+    <string name="lbl_manage_employee">Manage Employee</string>
+    <string name="lbl_manage_trans">Xyz sjdbf ksbd  kisndf \n 9374635364\n Salary Pending: 50000 \t Advance: 23423</string>
+    <string name="transaction_Date">Transaction Date</string>
+    <string name="transaction_Type">Transaction Type</string>
+    <string name="select_transaction">Select Transaction Type</string>
+    <string name="trans_Amt">Amount</string>
+    <string name="lbl_employee">Employee Name</string>
+    <string name="lbl_trans_desc">Desc</string>
     <string name="btn_backup">BackUp</string>
     <string name="btn_restore">Restore</string>
     <string name="lbl_off_backup">Offline Backup</string>
@@ -49,6 +60,12 @@
     <string name="developer_email">gunasekaran.arts@gmail.com</string>
     <string-array name="customers">
         <item>General Bill</item>
+    </string-array>
+    <string-array name="salary_trans_type">
+        <item>Salary</item>
+        <item>Advance Salary</item>
+        <item>Salary Paid</item>
+        <item>Advance Return</item>
     </string-array>
 
 </resources>

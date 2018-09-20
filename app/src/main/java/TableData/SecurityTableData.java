@@ -13,4 +13,7 @@ public class SecurityTableData implements BaseColumns {
     public static String Password="Password";
     public static String Email="Email";
     public static String Mobile="Mobile";
+    public static String Address="Address";
+    public static String CompanyName="CompanyName";
+    public static String BillHeader="BillHeader";
 }

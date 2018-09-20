@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public MBADatabase mHelper;
     TextView txtuserName,txtusermail;
-    Fragment fragment = null;
+    public Fragment fragment = null;
     boolean doubleBackToExitPressedOnce = false;
     SecurityProfile securityProfile;
     public GoogleSignInClient mGoogleSignInClient;
@@ -117,7 +117,16 @@ public class MainActivity extends AppCompatActivity
 //                super.onBackPressed();
 //                return;
 //            }
-            if(!(fragment instanceof OrderItems_Fragment))
+            if(fragment instanceof EmpSalaryTransaction){
+                fragment = new ManageEmployee();
+                FragmentTransaction fragmentTransaction=
+                        getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.enter_from_left,
+                        R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
+                fragmentTransaction.replace(R.id.fragment_container,fragment);
+                fragmentTransaction.commit();
+            }
+            else if(!(fragment instanceof OrderItems_Fragment))
             {
                 fragment = new OrderItems_Fragment();
                 FragmentTransaction fragmentTransaction=
@@ -300,11 +309,10 @@ public class MainActivity extends AppCompatActivity
             if(!(fragment instanceof Home))
                 fragment = new Home();
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        }else if(id==R.id.nav_customers) {
+        } else if (id == R.id.nav_employee) {
+            if(!(fragment instanceof ManageEmployee))
+                fragment = new ManageEmployee();
+        } else if(id==R.id.nav_customers) {
             if(!(fragment instanceof ManageCustomers))
                 fragment = new ManageCustomers();
         }
@@ -316,6 +324,10 @@ public class MainActivity extends AppCompatActivity
             if(!(fragment instanceof OrderItems_Fragment))
                 fragment = new OrderItems_Fragment();
 
+        }else if (id == R.id.nav_profile) {
+            if(!(fragment instanceof Profile) ){
+                fragment=new Profile();
+            }
         }else if(id==R.id.nav_backup) {
             if(!(fragment instanceof ManageBackup))
                 fragment = new ManageBackup();

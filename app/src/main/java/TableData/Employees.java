@@ -15,6 +15,7 @@ public class Employees implements BaseColumns {
     public static String EmployeeAlternateNo="EmployeeAlternateNo";
     public static String EmpJoinDate="EmpJoinDate";
     public static String EmpReleaveDate="EmployeeReleaveDate";
+    public static String EmployeePhoto="EmployeePhoto";
     public static String EmpRemarks="EmpRemarks";
     public static String EmpStatus="EmpStatus";
     public static String EmployeeTypeId="EmployeeTypeId";

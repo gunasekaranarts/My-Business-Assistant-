@@ -70,8 +70,7 @@ public class OrderItems_Fragment extends Fragment {
 
     AppCompatSpinner spr_orders,spr_customers;
     AppCompatButton btn_add_new,btn_add,btn_print;
-    AppCompatAutoCompleteTextView auto_txt_itemname;
-    AppCompatEditText txt_qty,txt_suggest;
+    AppCompatAutoCompleteTextView auto_txt_itemname,txt_suggest,txt_qty;
     MBADatabase mSqlHelper;
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
@@ -84,7 +83,7 @@ public class OrderItems_Fragment extends Fragment {
     Customers selectedCustomer;
     OrderItem orderItem;
     POrders selectedOrder;
-
+    TextAwesome btn_copy,btn_delete;
     Fragment fragment;
     @Nullable
     @Override
@@ -98,6 +97,8 @@ public class OrderItems_Fragment extends Fragment {
         auto_txt_itemname=view.findViewById(R.id.auto_txt_itemname);
         txt_qty=view.findViewById(R.id.txt_qty);
         txt_suggest=view.findViewById(R.id.txt_suggest);
+        btn_copy=view.findViewById(R.id.btn_copy);
+        btn_delete=view.findViewById(R.id.btn_delete);
         recyclerView=view.findViewById(R.id.rcv_order_items);
         layoutManager=new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(layoutManager);
@@ -115,6 +116,8 @@ public class OrderItems_Fragment extends Fragment {
             }
         });
         ArrayAdapter autoCompleteAdapter = new ArrayAdapter(mContext, android.R.layout.simple_list_item_1, mSqlHelper.GetMasterItems());
+        ArrayAdapter autoCompleteSuggestAdapter = new ArrayAdapter(mContext, android.R.layout.simple_list_item_1, mSqlHelper.getAutoSuggestions());
+        ArrayAdapter autoCompleteQtyAdapter = new ArrayAdapter(mContext, android.R.layout.simple_list_item_1, mSqlHelper.getAutoQty());
         spr_customers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -143,6 +146,13 @@ public class OrderItems_Fragment extends Fragment {
         auto_txt_itemname.setHint("Enter Item Name");
         auto_txt_itemname.setThreshold(1);
         auto_txt_itemname.setAdapter(autoCompleteAdapter);
+
+        txt_suggest.setThreshold(1);
+        txt_suggest.setAdapter(autoCompleteSuggestAdapter);
+
+        txt_qty.setThreshold(1);
+        txt_qty.setAdapter(autoCompleteQtyAdapter);
+
         btn_add_new.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,6 +189,7 @@ public class OrderItems_Fragment extends Fragment {
                     selectedOrder=orders.get(spr_orders.getSelectedItemPosition());
                     orderItem.setOrderId(selectedOrder.getOrderId());
                     mSqlHelper.InsertOrUpdateOrderItem(orderItem);
+                    orderItem=null;
                     Item item=new Item();
                     item.setMasterItemName(auto_txt_itemname.getText().toString());
                     mSqlHelper.CheckInsertMasterItem(item);
@@ -199,7 +210,44 @@ public class OrderItems_Fragment extends Fragment {
 //                        R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
 //                fragmentTransaction.replace(R.id.fragment_container,fragment);
 //                fragmentTransaction.commit();
-                showAlertPrint("Do you want to print this bill?" ,1);
+                if(orderItems==null){
+                    AppUtil.ShowMessage(mContext,"You must have at least one item to print!",1);
+                }
+                else if(orderItems.size()<=0)
+                {
+                 AppUtil.ShowMessage(mContext,"You must have at least one item to print!",1);
+                }else {
+                    showAlertPrint("Do you want to print this bill?", 1);
+                }
+            }
+        });
+
+
+        btn_copy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(orderItems==null){
+                    AppUtil.ShowMessage(mContext,"You must have at least one item to copy!",1);
+                }
+                else if(orderItems.size()<=0)
+                {
+                    AppUtil.ShowMessage(mContext,"You must have at least one item to copy!",1);
+                }else {
+                    showAlertCopy();
+                }
+            }
+        });
+
+        btn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(spr_orders.getSelectedItemPosition()==0){
+                    AppUtil.ShowMessage(mContext,"You must select an order to delete!",1);
+                }
+                else {
+                    showAlertDelete();
+                    setOrdersAdapter(selectedCustomer.getCustomerID());
+                }
             }
         });
         return view;
@@ -218,13 +266,16 @@ public class OrderItems_Fragment extends Fragment {
             orderItems = mSqlHelper.getOrderItems(selectedOrder.getOrderId());
             recyclerViewAdapter.setData(orderItems);
             recyclerView.setAdapter(recyclerViewAdapter);
+
         }else{
             if(orderItems!=null) {
                 orderItems.clear();
                 recyclerViewAdapter.setData(orderItems);
                 recyclerView.setAdapter(recyclerViewAdapter);
+
             }
         }
+
     }
     public void refreshRecyclerView(){
         if(spr_orders.getSelectedItemPosition()>=1) {
@@ -233,6 +284,7 @@ public class OrderItems_Fragment extends Fragment {
             orderItems = mSqlHelper.getOrderItems(selectedOrder.getOrderId());
             recyclerViewAdapter.setData(orderItems);
             recyclerView.setAdapter(recyclerViewAdapter);
+
         }else{
             orderItems.clear();
             recyclerViewAdapter.setData(orderItems);
@@ -243,9 +295,9 @@ public class OrderItems_Fragment extends Fragment {
     private void displayItems(View view, int position) {
         final TextView txtvw_itemname;
         final TextAwesome btn_detele;
-        orderItem=orderItems.get(position);
+        final OrderItem orderItem1=orderItems.get(position);
         txtvw_itemname = (TextView) view.findViewById(R.id.txtvw_itemname);
-        txtvw_itemname.setText(orderItem.getItemName()+" \nQty: "+orderItem.getItemQty()+"\nSuggest:"+orderItem.getItemSuggest());
+        txtvw_itemname.setText(orderItem1.getItemName()+" \nQty: "+orderItem1.getItemQty()+"\nSuggest:"+orderItem1.getItemSuggest());
         btn_detele = (TextAwesome) view.findViewById(R.id.btn_detele);
         btn_detele.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -258,7 +310,7 @@ public class OrderItems_Fragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         SQLiteDatabase dataBase = mSqlHelper.getWritableDatabase();
                         dataBase.beginTransaction();
-                        dataBase.delete(OrderItems.OrderItemsTable, OrderItems.OrderItemId + "=?",new String[] {String.valueOf(orderItem.getItemId())});
+                        dataBase.delete(OrderItems.OrderItemsTable, OrderItems.OrderItemId + "=?",new String[] {String.valueOf(orderItem1.getItemId())});
                         dataBase.setTransactionSuccessful();
                         dataBase.endTransaction();
                         dataBase.close();
@@ -279,9 +331,9 @@ public class OrderItems_Fragment extends Fragment {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                auto_txt_itemname.setText(orderItem.getItemName());
-                txt_qty.setText(orderItem.getItemQty());
-                txt_suggest.setText(orderItem.getItemSuggest());
+                auto_txt_itemname.setText(orderItem1.getItemName());
+                txt_qty.setText(orderItem1.getItemQty());
+                txt_suggest.setText(orderItem1.getItemSuggest());
             }
         });
 
@@ -340,7 +392,68 @@ public class OrderItems_Fragment extends Fragment {
         ordersAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, orders);
         spr_orders.setAdapter(ordersAdapter);
     }
+    public void showAlertDelete() {
+        android.support.v7.app.AlertDialog.Builder builder =
+                new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_DayNight_Dialog);
+        builder.setTitle("My Business Assistant");
+        builder.setMessage("Are you sure want to delete this order?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+               mSqlHelper.DeleteOrder(selectedOrder.getOrderId());
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+    public void showAlertCopy() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_copy);
+        final AppCompatEditText txt_order_name=(AppCompatEditText) dialog.findViewById(R.id.tv_OrderName);
+        final AppCompatSpinner spr_copy_customers=dialog.findViewById(R.id.spr_customers);
+        customers=new ArrayList<Customers>();
+        Customers tc=new Customers();
+        tc.setCustomerName("General Bill");
+        tc.setCustomerID(0);
+        tc.setCustomerPlace("");
+        customers=mSqlHelper.getCustomers();
+        customers.add(0,tc);
+        customerAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, customers);
+        spr_copy_customers.setAdapter(customerAdapter);
+        Button Ok = (Button) dialog.findViewById(R.id.btn_copy);
 
+        Ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(txt_order_name.getText().toString().equals("")){
+                    txt_order_name.setError("Should not be empty!!!");
+                    txt_order_name.requestFocus();
+                }else {
+                    Calendar calendar = Calendar.getInstance();
+                    String cdate=android.text.format.DateFormat.format("yyyyMMddhhmm", calendar.getTime()).toString();
+                    POrders po=new POrders();
+                    po.setOrderDate(cdate);
+                    po.setOrderName(txt_order_name.getText().toString());
+                    po.setCustomerId(customers.get(spr_copy_customers.getSelectedItemPosition()).getCustomerID());
+                    mSqlHelper.InsertOrder(po);
+                    mSqlHelper.CopyOrderItems(selectedOrder.getOrderId());
+                    dialog.dismiss();
+                    AppUtil.ShowMessage(mContext,"Order Copied",Toast.LENGTH_LONG);
+                }
+
+            }
+        });
+        dialog.show();
+    }
     public void showAlertPrint(String BuilderText,final int i) {
         android.support.v7.app.AlertDialog.Builder builder =
                 new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_DayNight_Dialog);
@@ -383,20 +496,23 @@ public class OrderItems_Fragment extends Fragment {
 
             String pdfFile = selectedOrder.getOrderName()+selectedOrder.getOrderDate()+".pdf";
             File file = new File(myDir, pdfFile);
-//            Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
-//                    Font.BOLD);
-//            Font greenFont = new Font(Font.FontFamily.TIMES_ROMAN, 22,
-//                    Font.BOLDITALIC, BaseColor.GREEN);
-//            Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,
-//                    Font.NORMAL, BaseColor.RED);
-//            Font blueFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,
-//                    Font.NORMAL, BaseColor.BLUE);
-//            Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,
-//                    Font.BOLD);
-//            Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12,
-//                    Font.BOLD);
+            Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
+                    Font.BOLD);
+            Font greenFont = new Font(Font.FontFamily.TIMES_ROMAN, 22,
+                    Font.BOLDITALIC, BaseColor.GREEN);
+            Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,
+                    Font.NORMAL, BaseColor.RED);
+            Font blueFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,
+                    Font.NORMAL, BaseColor.BLUE);
+            Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,
+                    Font.BOLD);
+            Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12,
+                    Font.BOLD);
+            Font smallItalic = new Font(Font.FontFamily.TIMES_ROMAN, 12,
+                    Font.ITALIC);
 
             try{
+                SecurityProfile securityProfile = mSqlHelper.getProfile();
                 Document document = new Document(PageSize.A4);
                 PdfWriter.getInstance(document, new FileOutputStream(file));
                 document.open();
@@ -404,27 +520,80 @@ public class OrderItems_Fragment extends Fragment {
                 document.newPage();
                 Paragraph preface = new Paragraph();
                 addEmptyLine(preface, 1);
-                Paragraph heading=new Paragraph("My Business Assistant App- Bill");
+                Paragraph god=new Paragraph(securityProfile.getBillHeader(),smallItalic);
+                god.setAlignment(Element.ALIGN_CENTER);
+                document.add(god);
+                Paragraph heading=new Paragraph(securityProfile.getCompanyName(),catFont);
                 heading.setAlignment(Element.ALIGN_CENTER);
                 document.add(heading);
+                Paragraph address=new Paragraph(securityProfile.getAddress(),smallBold);
+                address.setAlignment(Element.ALIGN_CENTER);
+                document.add(address);
+                Paragraph mobilenos=new Paragraph("Mobile : "+securityProfile.getMobile(),smallBold);
+                mobilenos.setAlignment(Element.ALIGN_CENTER);
+                document.add(mobilenos);
+                PdfPTable table = new PdfPTable(4);
+                try {
+                    table.setWidths(new int[]{1,1,1,1});
 
-                addEmptyLine(preface, 1);
-                SecurityProfile securityProfile = mSqlHelper.getProfile();
-                preface.add(new Paragraph(
-                        "Order No :"+selectedOrder.getOrderId()));
-                preface.add(new Paragraph(
-                        "Order Name\t:\t "+selectedOrder.toString()));
-                preface.add(new Paragraph(
-                        "This Order sheet generated by My Business Assitant App(MBA)"));
-                preface.setAlignment(Element.ALIGN_LEFT);
-                document.add(preface);
+                } catch (DocumentException e) {
+                    e.printStackTrace();
+                }
                 Paragraph preface1=new Paragraph();
                 addEmptyLine(preface1,1);
                 document.add(preface1);
+                PdfPCell c1 = new PdfPCell(new Phrase("Order No "));
+                c1.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(c1);
+                c1 = new PdfPCell(new Phrase(String.valueOf(selectedOrder.getOrderId())));
+                c1.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(c1);
+
+                c1 = new PdfPCell(new Phrase("Order Name "));
+                c1.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(c1);
+                c1 = new PdfPCell(new Phrase(selectedOrder.toString()));
+                c1.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(c1);
+
+                c1 = new PdfPCell(new Phrase("Customer Name "));
+                c1.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(c1);
+                c1 = new PdfPCell(new Phrase(selectedCustomer.getCustomerName()));
+                c1.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(c1);
+
+                c1 = new PdfPCell(new Phrase("Customer Place "));
+                c1.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(c1);
+                c1 = new PdfPCell(new Phrase(selectedCustomer.getCustomerPlace()));
+                c1.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(c1);
+
+                c1 = new PdfPCell(new Phrase("Customer Mobile "));
+                c1.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(c1);
+                c1 = new PdfPCell(new Phrase((selectedCustomer.getCustomerMobile()==null?"":selectedCustomer.getCustomerMobile())));
+                c1.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(c1);
+                c1 = new PdfPCell(new Phrase(""));
+                c1.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(c1);
+                c1 = new PdfPCell(new Phrase(""));
+                c1.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(c1);
+                document.add(table);
+                addEmptyLine(preface1,1);
+                document.add(preface1);
                 addTransactionTable(document);
+
                 Paragraph thks=new Paragraph("* * * Thanks * * *");
                 thks.setAlignment(Element.ALIGN_CENTER);
                 document.add(thks);
+                Paragraph sig=new Paragraph("Generated by My Business Assistant(MBA) App",smallItalic);
+                sig.setAlignment(Element.ALIGN_RIGHT);
+                document.add(sig);
+
                 document.close();
                 Toast.makeText(getActivity(), "Data Exported as a PDF file at - "+file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                 if(is_Share)
@@ -449,20 +618,21 @@ public class OrderItems_Fragment extends Fragment {
         } catch (DocumentException e) {
             e.printStackTrace();
         }
-
-        PdfPCell c1 = new PdfPCell(new Phrase("SNo"));
+        Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12,
+                Font.BOLD);
+        PdfPCell c1 = new PdfPCell(new Paragraph("SNo",smallBold));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase("Name and Suggestion"));
+        c1 = new PdfPCell(new Phrase("Name and Suggestion",smallBold));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase("Qty"));
+        c1 = new PdfPCell(new Phrase("Qty",smallBold));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase("Check"));
+        c1 = new PdfPCell(new Phrase("Check",smallBold));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
 
@@ -478,13 +648,7 @@ public class OrderItems_Fragment extends Fragment {
             c1 = new PdfPCell(new Phrase(String.valueOf(i)));
             c1.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(c1);
-            AppUtil.ShowMessage(mContext,t.getItemSuggest(),1);
-
-            try {
-                table.addCell(URLEncoder.encode(t.getItemName(), "UTF-8")+" \n"+t.getItemSuggest());
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            table.addCell(t.getItemName()+" \n"+t.getItemSuggest());
             c1=new PdfPCell(new Phrase(t.getItemQty()));
             c1.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(c1);

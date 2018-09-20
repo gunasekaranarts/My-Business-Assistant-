@@ -11,10 +11,10 @@
             android:visible="false"
             />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_employee"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Employees"
-            android:visible="false"
+            android:visible="true"
             />
         <item
             android:id="@+id/nav_slideshow"
@@ -24,7 +24,7 @@
             />
         <item
             android:id="@+id/nav_customers"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_customers"
             android:title="Customers" />
         <item
             android:id="@+id/nav_order"
@@ -34,6 +34,10 @@
             android:id="@+id/nav_masteritem"
             android:icon="@drawable/ic_menu_manage"
             android:title="Item Master" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_menu_profile"
+            android:title="Profile" />
         <item
             android:id="@+id/nav_backup"
             android:icon="@drawable/ic_menu_backup"
